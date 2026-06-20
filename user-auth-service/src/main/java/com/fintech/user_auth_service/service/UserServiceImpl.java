@@ -4,6 +4,7 @@ import com.fintech.user_auth_service.dto.UserRegisterRequest;
 import com.fintech.user_auth_service.model.User;
 import com.fintech.user_auth_service.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -11,6 +12,9 @@ public class UserServiceImpl implements UserService{
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public String registerUser(UserRegisterRequest request){
@@ -22,7 +26,8 @@ public class UserServiceImpl implements UserService{
         User newUser = new User();
         newUser.setUsername(request.getUsername());
         newUser.setEmail(request.getEmail());
-        newUser.setPassword(request.getPassword());
+        String hashedPassword = passwordEncoder.encode(request.getPassword());
+        newUser.setPassword(hashedPassword);
 
         userRepository.save(newUser);
 
