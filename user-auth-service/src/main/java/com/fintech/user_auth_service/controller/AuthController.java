@@ -1,5 +1,6 @@
 package com.fintech.user_auth_service.controller;
 
+import com.fintech.user_auth_service.dto.UserLoginRequest;
 import com.fintech.user_auth_service.dto.UserRegisterRequest;
 import com.fintech.user_auth_service.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,17 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@RequestBody UserRegisterRequest request){
         String response = userService.registerUser(request);
+
+        if(response.contains("Error")){
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> loginUser(@RequestBody UserLoginRequest request){
+        String response = userService.loginUser(request);
 
         if(response.contains("Error")){
             return ResponseEntity.badRequest().body(response);
