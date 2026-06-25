@@ -4,6 +4,7 @@ import com.fintech.user_auth_service.dto.UserLoginRequest;
 import com.fintech.user_auth_service.dto.UserRegisterRequest;
 import com.fintech.user_auth_service.model.User;
 import com.fintech.user_auth_service.repository.UserRepository;
+import com.fintech.user_auth_service.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,9 @@ public class UserServiceImpl implements UserService{
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @Override
     public String registerUser(UserRegisterRequest request){
@@ -48,6 +52,7 @@ public class UserServiceImpl implements UserService{
         if(!isPasswordMatch){
             return "Error: invalid Password";
         }
-        return "Login successful ! welcome" + user.getUsername();
+        String token = jwtUtil.generateToken(user.getEmail());
+        return token;
     }
 }
