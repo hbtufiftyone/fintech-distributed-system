@@ -3,6 +3,7 @@ package com.fintech.user_auth_service.controller;
 import com.fintech.user_auth_service.dto.UserLoginRequest;
 import com.fintech.user_auth_service.dto.UserRegisterRequest;
 import com.fintech.user_auth_service.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,7 @@ public class AuthController {
     private com.fintech.user_auth_service.security.JwtUtil jwtUtil;
 
     @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@RequestBody UserRegisterRequest request){
+    public ResponseEntity<String> registerUser(@Valid @RequestBody UserRegisterRequest request){
         String response = userService.registerUser(request);
 
         if(response.contains("Error")){
